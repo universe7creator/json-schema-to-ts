@@ -1,0 +1,20 @@
+{
+  "name": "JSON Schema to TypeScript",
+  "slug": "json-schema-to-ts",
+  "tagline": "Convert JSON Schema to TypeScript types",
+  "description": "Generate TypeScript interfaces and types from JSON Schema definitions. Supports complex schemas, nested objects, and validation.",
+  "price": "19",
+  "features": [
+    "JSON Schema to TypeScript",
+    "Interface generation",
+    "Type unions support",
+    "Nested object handling",
+    "Validation annotations",
+    "Export options"
+  ],
+  "tech_stack": "Vercel + Node.js",
+  "status": "spec_ready",
+  "category": "developer_tools",
+  "spec_version": "1.0",
+  "checkout_url": null
+}

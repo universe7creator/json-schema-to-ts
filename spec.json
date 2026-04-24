@@ -1,0 +1,19 @@
+{
+  "slug": "json-schema-to-ts",
+  "name": "JSON Schema to TypeScript",
+  "description": "Convert JSON Schema to TypeScript interfaces instantly with comments and validation",
+  "price": "$19",
+  "category": "developer-tools",
+  "features": [
+    "JSON Schema to TypeScript conversion",
+    "Preserves descriptions as JSDoc comments",
+    "Handles complex nested types",
+    "Support for $ref and definitions",
+    "Copy/export generated types",
+    "Syntax highlighting"
+  ],
+  "tech_stack": ["HTML5", "TailwindCSS", "JavaScript", "json-schema-to-typescript"],
+  "status": "spec_ready",
+  "created_cycle": 1064,
+  "priority": "high"
+}

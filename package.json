@@ -1,0 +1,11 @@
+{
+  "name": "json-schema-to-ts",
+  "version": "1.0.0",
+  "description": "Convert JSON Schema to TypeScript interfaces",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

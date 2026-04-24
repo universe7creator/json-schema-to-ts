@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Schema to TypeScript | Convert Schemas to Types</title>
+    <meta name="description" content="Convert JSON Schema definitions to TypeScript interfaces instantly. Generate clean, validated TypeScript types from any JSON Schema.">
+    <meta property="og:title" content="JSON Schema to TypeScript">
+    <meta property="og:description" content="Convert JSON Schema to TypeScript interfaces instantly">
+    <meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#0a0a0a',
+                        surface: '#111827',
+                        elevated: '#1f2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+        .glass {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+        .editor-bg {
+            background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+        }
+        .line-number {
+            color: #6e7681;
+            text-align: right;
+            padding-right: 1rem;
+            user-select: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s ease-out infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-dark text-white font-sans min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <span class="font-mono font-bold text-white text-sm">{T}</span>
+                    </div>
+                    <span class="font-semibold text-lg">SchemaToTS</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a>
+                    <a href="#demo" class="text-gray-400 hover:text-white transition-colors">Demo</a>
+                    <a href="#pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a>
+                </div>
+                <a href="https://profitbridge.lemonsqueezy.com/checkout/buy/json-schema-to-ts-001" class="btn-glow px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary font-medium text-sm hover:shadow-lg hover:shadow-primary/30 transition-all">
+                    Get Access - $19
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-5xl mx-auto text-center relative z-10 fade-in">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-surface border border-white/10 mb-8">
+                <span class="w-2 h-2 rounded-full bg-green-400 mr-2 pulse-ring"></span>
+                <span class="text-sm text-gray-400">82+ developers already using</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                JSON Schema to<br>
+                <span class="gradient-text">TypeScript</span>
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                Convert your JSON Schema definitions to clean TypeScript interfaces instantly.
+                No setup required, just paste and convert.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#demo" class="btn-glow px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-lg hover:shadow-lg hover:shadow-primary/40 transition-all glow">
+                    Try Demo Free
+                </a>
+                <a href="#features" class="px-8 py-4 rounded-xl glass font-medium text-lg hover:bg-white/5 transition-all">
+                    See Features
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Try It Live</h2>
+                <p class="text-gray-400">Paste your JSON Schema and see the TypeScript output instantly</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 fade-in">
+                <!-- Input -->
+                <div class="editor-bg rounded-xl border border-white/10 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-surface">
+                        <span class="text-sm font-medium text-gray-400">JSON Schema Input</span>
+                        <button onclick="fillExample()" class="text-xs text-primary hover:text-white transition-colors">Load Example</button>
+                    </div>
+                    <textarea id="schemaInput" class="w-full h-80 p-4 font-mono text-sm bg-transparent resize-none focus:outline-none text-gray-300" placeholder="Paste your JSON Schema here..."></textarea>
+                </div>
+                <!-- Output -->
+                <div class="editor-bg rounded-xl border border-white/10 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-surface">
+                        <span class="text-sm font-medium text-gray-400">TypeScript Output</span>
+                        <button onclick="copyOutput()" id="copyBtn" class="text-xs text-primary hover:text-white transition-colors">Copy</button>
+                    </div>
+                    <div id="output" class="w-full h-80 p-4 font-mono text-sm overflow-auto text-gray-300">
+                        <span class="text-gray-600">// Output will appear here...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <button onclick="convertSchema()" id="convertBtn" class="btn-glow px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-lg hover:shadow-lg hover:shadow-primary/40 transition-all">
+                    Convert to TypeScript
+                </button>
+                <p id="errorMsg" class="mt-4 text-red-400 text-sm hidden"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Everything You Need</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Professional-grade schema conversion with all the features developers expect
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Full Schema Support</h3>
+                    <p class="text-gray-400 text-sm">Supports JSON Schema Draft 7, 2019-09, and 2020-12 with all validation keywords</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-secondary/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Instant Conversion</h3>
+                    <p class="text-gray-400 text-sm">Client-side processing means your schemas never leave your browser. Fast and secure.</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Smart Types</h3>
+                    <p class="text-gray-400 text-sm">Generates unions, enums, nested interfaces, and proper optional/nullable handling</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Copy & Export</h3>
+                    <p class="text-gray-400 text-sm">One-click copying or download as .ts file. Ready to paste into your project.</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-secondary/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Configurable</h3>
+                    <p class="text-gray-400 text-sm">Customize output: interface vs type, strict null checks, JSDoc comments, and more</p>
+                </div>
+                <div class="glass rounded-xl p-6 hover:bg-white/5 transition-all fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">No Uploads</h3>
+                    <p class="text-gray-400 text-sm">Everything runs locally in your browser. Your schemas and data stay private.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Simple Pricing</h2>
+                <p class="text-gray-400">One-time purchase, lifetime access</p>
+            </div>
+            <div class="glass rounded-2xl p-8 max-w-md mx-auto glow fade-in">
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-2">Lifetime Access</h3>
+                    <div class="flex items-baseline justify-center gap-2 mb-6">
+                        <span class="text-5xl font-bold">$19</span>
+                        <span class="text-gray-400">one-time</span>
+                    </div>
+                    <ul class="space-y-3 text-left mb-8">
+                        <li class="flex items-center text-gray-300">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Unlimited conversions
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Advanced export options
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Priority support
+                        </li>
+                        <li class="flex items-center text-gray-300">
+                            <svg class="w-5 h-5 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            All future updates
+                        </li>
+                    </ul>
+                    <a href="https://profitbridge.lemonsqueezy.com/checkout/buy/json-schema-to-ts-001" class="btn-glow block w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-lg hover:shadow-lg hover:shadow-primary/40 transition-all text-center">
+                        Get Lifetime Access
+                    </a>
+                    <p class="mt-4 text-sm text-gray-500">Secure payment via LemonSqueezy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 fade-in">FAQ</h2>
+            <div class="space-y-4">
+                <div class="glass rounded-xl p-6 fade-in">
+                    <h3 class="font-semibold mb-2">What JSON Schema versions are supported?</h3>
+                    <p class="text-gray-400 text-sm">We support JSON Schema Draft 7, 2019-09, and 2020-12. The converter automatically detects the version and generates appropriate TypeScript.</p>
+                </div>
+                <div class="glass rounded-xl p-6 fade-in">
+                    <h3 class="font-semibold mb-2">Is my data secure?</h3>
+                    <p class="text-gray-400 text-sm">Absolutely. All conversion happens client-side in your browser. Your schemas never leave your machine or touch our servers.</p>
+                </div>
+                <div class="glass rounded-xl p-6 fade-in">
+                    <h3 class="font-semibold mb-2">Can I get a refund?</h3>
+                    <p class="text-gray-400 text-sm">Yes, we offer a 30-day money-back guarantee. If you're not satisfied, contact us for a full refund.</p>
+                </div>
+                <div class="glass rounded-xl p-6 fade-in">
+                    <h3 class="font-semibold mb-2">Do I get updates?</h3>
+                    <p class="text-gray-400 text-sm">Yes, lifetime access includes all future updates and improvements to the converter.</p>
+                </div>
+                <div class="glass rounded-xl p-6 fade-in">
+                    <h3 class="font-semibold mb-2">Can I use this commercially?</h3>
+                    <p class="text-gray-400 text-sm">Yes, your purchase includes a commercial license. Use it for personal or commercial projects without restrictions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 border-t border-white/10">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                    <span class="font-mono font-bold text-white text-sm">{T}</span>
+                </div>
+                <span class="font-semibold">SchemaToTS</span>
+            </div>
+            <p class="text-gray-500 text-sm">© 2024 SchemaToTS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const exampleSchema = JSON.stringify({
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "title": "User",
+            "type": "object",
+            "required": ["id", "email", "name"],
+            "properties": {
+                "id": { "type": "integer" },
+                "name": { "type": "string", "minLength": 1 },
+                "email": { "type": "string", "format": "email" },
+                "age": { "type": "integer", "minimum": 0 },
+                "role": {
+                    "type": "string",
+                    "enum": ["admin", "user", "guest"],
+                    "default": "user"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "street": { "type": "string" },
+                        "city": { "type": "string" },
+                        "country": { "type": "string" }
+                    }
+                },
+                "tags": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "isActive": { "type": "boolean", "default": true }
+            }
+        }, null, 2);
+
+        function fillExample() {
+            document.getElementById('schemaInput').value = exampleSchema;
+        }
+
+        function convertSchema() {
+            const input = document.getElementById('schemaInput').value;
+            const output = document.getElementById('output');
+            const errorMsg = document.getElementById('errorMsg');
+            const btn = document.getElementById('convertBtn');
+
+            btn.disabled = true;
+            btn.innerHTML = 'Converting...';
+            errorMsg.classList.add('hidden');
+
+            try {
+                const schema = JSON.parse(input);
+                const ts = schemaToTS(schema);
+                output.innerHTML = `<pre class="text-green-400">${escapeHtml(ts)}</pre>`;
+            } catch (e) {
+                errorMsg.textContent = 'Error: ' + e.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Convert to TypeScript';
+            }
+        }
+
+        function schemaToTS(schema, name = 'Root', depth = 0) {
+            const indent = '  '.repeat(depth);
+            let result = '';
+
+            if (schema.type === 'object' || (!schema.type && schema.properties)) {
+                const title = schema.title || name;
+                result += `${indent}interface ${sanitizeName(title)} {\n`;
+
+                const props = schema.properties || {};
+                const required = new Set(schema.required || []);
+
+                for (const [key, value] of Object.entries(props)) {
+                    const isRequired = required.has(key);
+                    const tsType = jsonTypeToTS(value, key);
+                    const optional = isRequired ? '' : '?';
+                    result += `${indent}  ${key}${optional}: ${tsType};\n`;
+                }
+
+                result += `${indent}}\n`;
+
+                // Process nested objects
+                for (const [key, value] of Object.entries(props)) {
+                    if (value.type === 'object' && value.properties) {
+                        result += '\n' + schemaToTS(value, capitalize(key), depth);
+                    }
+                    if (value.type === 'array' && value.items && value.items.type === 'object') {
+                        result += '\n' + schemaToTS(value.items, capitalize(key) + 'Item', depth);
+                    }
+                }
+            } else if (schema.type === 'array') {
+                result += `${indent}type ${name} = ${jsonTypeToTS(schema.items, name)}[];\n`;
+            }
+
+            return result || `${indent}type ${name} = any;\n`;
+        }
+
+        function jsonTypeToTS(prop, key) {
+            if (!prop) return 'any';
+
+            if (prop.enum) {
+                return prop.enum.map(v => `'${v}'`).join(' | ');
+            }
+
+            if (prop.$ref) {
+                const refName = prop.$ref.split('/').pop();
+                return sanitizeName(refName);
+            }
+
+            switch (prop.type) {
+                case 'string':
+                    if (prop.format === 'date-time') return 'Date';
+                    if (prop.format === 'email') return 'string';
+                    return 'string';
+                case 'integer':
+                case 'number':
+                    return 'number';
+                case 'boolean':
+                    return 'boolean';
+                case 'array':
+                    const itemType = prop.items ? jsonTypeToTS(prop.items, key) : 'any';
+                    return `${itemType}[]`;
+                case 'object':
+                    if (prop.properties) {
+                        return capitalize(key);
+                    }
+                    return 'Record<string, any>';
+                case 'null':
+                    return 'null';
+                default:
+                    if (Array.isArray(prop.type)) {
+                        return prop.type.map(t => t === 'null' ? 'null' : jsonTypeToTS({type: t}, key)).join(' | ');
+                    }
+                    return 'any';
+            }
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function sanitizeName(name) {
+            return name.replace(/[^a-zA-Z0-9_]/g, '_').replace(/^[0-9]/, '_$&');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output').innerText;
+            navigator.clipboard.writeText(output).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const original = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = original, 2000);
+            });
+        }
+
+        // Auto-convert on paste
+        document.getElementById('schemaInput').addEventListener('paste', () => {
+            setTimeout(convertSchema, 100);
+        });
+    </script>
+</body>
+</html>
