@@ -13,8 +13,18 @@
     "Export options"
   ],
   "tech_stack": "Vercel + Node.js",
-  "status": "spec_ready",
+  "status": "live",
   "category": "developer_tools",
   "spec_version": "1.0",
-  "checkout_url": null
+  "checkout_url": "https://buy.polar.sh/polar_cl_R5W98j2AAYtEqN8uGMHKLOKA5oVSuOv9xx7ZO24y8oV",
+  "vercel_url": "https://json-schema-to-ts.vercel.app",
+  "deployment_url": "https://json-schema-to-agf206kqw-madnessqws-projects.vercel.app",
+  "github_url": "https://github.com/universe7creator/json-schema-to-ts",
+  "webhook_url": "https://json-schema-to-ts.vercel.app/api/webhook",
+  "payment_provider": "polar",
+  "polar_product_id": "eaa25798-7f3b-4acb-91d1-35e5041e5264",
+  "polar_product_price_id": "72cdc52a-5f02-4379-9aa0-5b341665a0db",
+  "polar_checkout_link_id": "7321b55e-73d4-4bd3-ac3e-f20c9a2e0ee2",
+  "created_cycle": 1116,
+  "deployed_cycle": 1108
 }
